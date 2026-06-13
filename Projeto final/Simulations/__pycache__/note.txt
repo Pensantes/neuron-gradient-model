@@ -1,0 +1,3 @@
+Apenas um adendo, essa pasta '_pycache_' não é lixo, ela é essencial para o funcionamento da função FFT_functions(), já que guarda a biblioteca de sinais para a transformação. Esteja avisado, a simulação 'Solver neuron' dentro de 'screen.py' não irá funcionar caso essa pasta e arquivo sejam deletados
+
+
