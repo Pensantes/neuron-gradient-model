@@ -1,7 +1,0 @@
-numpy
-pygame
-matplotlib
-scipy
-pillow
-keyboard
-scikit-learn
