@@ -10,13 +10,22 @@ import matplotlib.pyplot as plt  # noqa: E402
 
 
 def exp_seguro(x: float):
+    """Função que impede que um valor saia de um certo intervalo, ela recebe:
+
+    x: o expoente de uma conta"""
     # vamos capar os expoentes para não ter erro computacional
     return np.exp(np.clip(x, -50, 50))
 
 
 def noise_P(n: float, sigma: float):
     """Essa função serve para adicionar um noise no calculo do P, para ficar
-    mais realista"""
+    mais realista.
+
+    Entrada:
+
+    n: tamanho do vetor de estado
+
+    sigma: desvio padrão da distribuição aleatória"""
     # Gera um noise aleatório
     eta = np.random.normal(0, sigma, size=n)
     eta -= np.mean(eta)  # Força o np.sum(eta) a ser 0. Não alterando o P
@@ -25,7 +34,16 @@ def noise_P(n: float, sigma: float):
 
 
 def normaliza_prob(P: np.array):
-    """Função que normaliza um array unidimencional"""
+    """Função que normaliza um array unidimencional
+
+    Entradas:
+
+    P: vetor probabilidade a ser normalizado
+
+    Saída:
+
+    O vetor P normalizado
+    """
     P = np.asarray(P, dtype=float)
     P = np.clip(P, 0, 1)
     s = np.sum(P)
@@ -35,6 +53,9 @@ def normaliza_prob(P: np.array):
 
 
 def k_Na(V: float):
+    """Função que atualiza as constantes de equilibrio do canal de Na
+
+    Recebe o potencial atual"""
     return [
         0.04 * exp_seguro(0.075 * (V + 65)),  # k1(ativação)
         2.5 * exp_seguro(-0.035 * (V + 65)),  # k-1(desativação)
@@ -47,6 +68,9 @@ def k_Na(V: float):
 
 
 def k_K(V: float):
+    """Função que atualiza as constantes de equilibrio do canal de K
+
+    Recebe o potencial atual"""
     return [
         0.025 * exp_seguro(0.03 * (V + 65)),  # k1(ativação)
         0.25 * exp_seguro(-0.025 * (V + 65)),  # k-1(desativação)
@@ -57,6 +81,9 @@ def k_K(V: float):
 
 
 def k_Ca(V: float):
+    """Função que atualiza as constantes de equilibrio do canal de Ca
+
+    Recebe o potencial atual"""
     return [
         0.02 * exp_seguro(0.05 * (V + 65)),  # k1(ativação)
         0.2 * exp_seguro(-0.03 * (V + 65)),  # k-1(desativação)
@@ -67,6 +94,9 @@ def k_Ca(V: float):
 
 
 def k_L(V: float):
+    """Função que atualiza as constantes de equilibrio do canal de L
+
+    Recebe o potencial atual"""
     return [
         0.1,  # k1  (ativação)
         0.1,  # k-1 (desativação)
@@ -79,12 +109,24 @@ def k_L(V: float):
 
 
 def dSyn_dt(s: float, tau: float):
-    """Diferencial da abertura da sinapse"""
+    """Diferencial da conexão sináptica, modela o decaimento do estímulo
+
+    Entrada:
+
+    s: intensidade atual do estímulo
+
+    tau: constante de decaimento
+    """
     return -s / tau
 
 
 def KCa_open(Ca_i: float):
-    """Equação diferencial para achar a porcentagem de corrente de acumulo de cálcio"""
+    """Equação diferencial para achar a porcentagem de corrente de acumulo de cálcio
+
+    Entrada:
+
+    Ca_i: potencial acumulado do íon cálcio
+    """
     Kd = 0.0005  # mM
     n = 4
 
@@ -92,7 +134,21 @@ def KCa_open(Ca_i: float):
 
 
 def dV_dt(t: float, V: float, estados: dict, g: dict, C: float, Ir: float):
-    """Calcula todas as correntes para achar a diferencial do potencial"""
+    """Calcula todas as correntes para achar a diferencial do potencial
+
+    Entradas:
+
+    t: tempo atual
+
+    V: potencial atual
+
+    estados: todos os vetores probabilidade de estado dos canais (dicionario)
+
+    g: a condutância dos canais (dicionario)
+
+    C: a capacitância da membrana
+
+    Ir: corrente de estímulo"""
     # Como ela é grande, vamos separar em componentes
     comp1 = Ir / C  # Corrente de estímulo
     comp2 = -(g["L"][0] / C) * (V - g["L"][1])  # *estados["PL"][2] #Corrente de vazão
@@ -116,7 +172,13 @@ def dV_dt(t: float, V: float, estados: dict, g: dict, C: float, Ir: float):
 
 
 def dCa_dt(ICa: float, Ca_i: float):
-    """Diferencial do acumulo de cálcio no neurônio"""
+    """Diferencial do acumulo de cálcio no neurônio
+
+    Entrada:
+
+    ICa: corrente no canal de cálcio
+
+    Ca_i: potencial acumulado dos íons cálcio"""
     Ca_rest = 0.0001
     alpha = 5e-7
     beta = 0.05
@@ -124,7 +186,7 @@ def dCa_dt(ICa: float, Ca_i: float):
 
 
 class Neuronio:
-    """Objeto do neurônio para mecher nele"""
+    """Objeto do neurônio para mexer nele"""
 
     def __init__(
         self,
@@ -137,6 +199,18 @@ class Neuronio:
         number: float,
         V0=-65,
     ):
+        """O objeto de neurônio recebe as seguintes variaveis como padrão:
+
+        estado: dicionario que guarda todos os vetores de probabilidade e o potencial
+
+        k: dicionario de equilíbrio
+
+        lista_V: lista dos potenciais para plotar os gráficos
+
+        line: guarda qual a própria linha dentro dos vários gráficos
+
+        number: qual o seu número (os neurônios são ordenados)
+        """
 
         self.k = {"Na": k_Na, "K": k_K, "Ca": k_Ca, "L": k_L}
         self.estado = {
@@ -159,7 +233,9 @@ class Neuronio:
 
 
 def steady_state(Q: np.array):
-    """Cria um vetor estável para o equilíbrio"""
+    """Cria um vetor estável para o equilíbrio
+
+    Q: Matriz de transição característica desse vetor"""
     # Vamos definir o equilíbrio inicial
     A = Q.copy()
     A[-1, :] = 1
@@ -169,7 +245,19 @@ def steady_state(Q: np.array):
 
 
 def Matriz_de_transicao(nome: str, k: dict, V: float):
-    """Calcula a matriz de transição para realizar a cadeia de Markov"""
+    """Calcula a matriz de transição para realizar a cadeia de Markov
+
+    Entrada:
+
+    nome: qual o nome do íon que será gerada a matriz
+
+    k: dicionário de constantes de equilíbrio
+
+    V: potencial de membrana
+
+    Saída:
+
+    A matriz de transição do canal"""
     if nome != "Na":
         K = k[nome](V)
         # Cria a matriz de transição
@@ -194,7 +282,25 @@ def Matriz_de_transicao(nome: str, k: dict, V: float):
 
 
 def f(t: float, y: np.array, k: dict, g: dict, C: float, Ir: float, Noise: bool):
-    """Calcula as diferenciais de cada parametro"""
+    """Calcula as diferenciais de cada parametro
+
+    Entradas:
+
+    t: tempo atual da iteração
+
+    y: vetor que concatena todas as variáveis
+
+    k: dicionário das constantes de equilíbrio
+
+    g: dicionário das condutâncias de cada canal
+
+    C: capacitância da membrana
+
+    Ir: estímulo externo
+
+    Saída:
+
+    Um vetor de mesmo tamanho que o y, mas as entradas são as variações em cada uma das componentes"""
     # Tau das sinapses
     tau_E = 1.2
     tau_I = 10.0
@@ -251,7 +357,27 @@ def f(t: float, y: np.array, k: dict, g: dict, C: float, Ir: float, Noise: bool)
 
 
 def RK4(t: float, y: list, dt: float, k: dict, g: dict, C: float, Ir: float):
+    """Função que aplica o método de evolução RK4 em uma função
 
+    Entradas:
+
+    t: tempo atual da iteração
+
+    y: vetor que junta todas as variáveis para evoluir
+
+    dt: passo de evolução
+
+    k: dicionário das constantes de equilíbrio
+
+    g: dicionário das condutâncias de cada canal
+
+    C: capacitância da membrana
+
+    Ir: estímulo externo
+
+    Saída:
+
+    Novo estado evoluído de cada variável"""
     k1 = f(t, y, k, g, C, Ir, False)
     k2 = f(t + dt / 2, y + dt * k1 / 2, k, g, C, Ir, False)
     k3 = f(t + dt / 2, y + dt * k2 / 2, k, g, C, Ir, False)
@@ -261,7 +387,21 @@ def RK4(t: float, y: list, dt: float, k: dict, g: dict, C: float, Ir: float):
 
 
 def step_neuronio(estado: dict, Ir: float, dt: float, k: dict, g: dict, Cm: float):
-    """Atualiza um neurônio individual"""
+    """Atualiza um neurônio individual
+
+    Entradas:
+
+    estado: dicionario com todas as variáveis para evoluírem
+
+    Ir: estímulo externo
+
+    dt: passo de evolução
+
+    k: dicionário das constantes de equilíbrio
+
+    g: dicionário das condutâncias de cada canal
+
+    C: capacitância da membrana"""
     y = np.concatenate(
         [
             estado["PNa"],
@@ -297,7 +437,19 @@ def step_neuronio(estado: dict, Ir: float, dt: float, k: dict, g: dict, Cm: floa
 
 
 def atualização(lista: list, var: float, tipo: str = "Parcial"):
-    """Atualiza a lista de valores para poupar memória"""
+    """Atualiza a lista de valores para poupar memória, ele tem um modo total que não limita a lista
+
+    Entrada:
+
+    lista: lista a ser atualizada
+
+    var: variável a ser inserida
+
+    tipo: string que diz se o programa vai salvar a lista parcialmente ou totalmente
+
+    Saída:
+
+    Uma lista que pode estar limitada ou não a depender do tipo"""
     if tipo != "Total":
         if len(lista) == 500:
             lista.pop(0)
@@ -311,7 +463,17 @@ def atualização(lista: list, var: float, tipo: str = "Parcial"):
 
 
 def get_extremo(neuronios: list, tipo: str):
-    """Retorna um valor extremo de todas as listas de potencias"""
+    """Retorna um valor extremo de todas as listas de potencias
+
+    Entrada:
+
+    neuronios: a lista de neurônios a serem iterados
+
+    tipo: string que diz se é desejado o minimo ou o máximo
+
+    Saída:
+
+    O maior ou menor valor de potencial entre os neurônios, a depender do tipo"""
     if tipo == "min":
         minimo = min(neuronios[0].lista_V)
         for n in neuronios:
@@ -536,16 +698,6 @@ def main():
             EEG += g["SynE"][0] * n.estado["SynE"] * (V - g["SynE"][1]) + g["SynI"][
                 0
             ] * n.estado["SynI"] * (V - g["SynI"][1])
-
-        # Para o grafico total
-        # Um EEG não mede V total, mede a corrente sinaptica entre os neuronios
-        # for n in neuronios:
-        #     V=n.estado["V"]
-        #     EEG+=(
-        #         g["SynE"][0]*n.estado["SynE"]*(V-g["SynE"][1])
-        #         +
-        #         g["SynI"][0]*n.estado["SynI"]*(V-g["SynI"][1])
-        #     )
 
         V_soma = gain * EEG
 
