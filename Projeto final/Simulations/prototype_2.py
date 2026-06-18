@@ -584,7 +584,7 @@ def main():
 
     ax.set_xlabel("tempo(ms)")
     ax.set_ylabel("potenciais(mV)")
-    ax.set_title("Grafico do potencial da membrana")
+    ax.set_title("Gráfico do potencial da membrana")
     ax.grid(True)
 
     (line,) = ax.plot(lista_t, lista_pot, label="V(t)")
