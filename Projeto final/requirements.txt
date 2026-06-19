@@ -1,5 +1,4 @@
 numpy
-pygame
 pygame-ce
 matplotlib
 scipy
