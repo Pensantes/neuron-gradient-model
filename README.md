@@ -11,12 +11,18 @@ Projeto que visa simular neurônios para avaliar o fluxo de íons, comportamento
 
 ## Como executar:
 
-Depois de baixar todas as extenções dentro do requirements.txt, o usuário deve abrir a pasta 'Projeto final' como pasta principal do programa. Após isso, o arquivo que deve ser executado deve ser o screen.py.
+Aqui vai o passo a passo de como executar esse programa:
 
-É recomendado criar um ambiente virtual para as bibliotecas desse projeto. O seguinte código deve ser rodado no seu terminal antes de iniciar o screen.py
+1. Baixe o arquivo zip e extraia ele em uma pasta
+
+2. Com o seu programa para executar o projeto (preferencialmente o VScode), vá em *file*, *Open folder* e selecione a pasta *Projeto final*.
+
+3. Execute esse comando no terminal
 ``` sh
 pip install -r requirements.txt
 ```
+
+4. Execute o script *screen.py*
 
 ## Conteúdo:
 
