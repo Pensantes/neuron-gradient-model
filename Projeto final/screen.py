@@ -215,10 +215,10 @@ def main():
     texto_multi = fonte_bem_pequena.render(str_texto_multi, True, (0, 0, 0))
 
     # Textos para solver
-    str_texto_multi = "Essa parte é uma tentativa de construir um algoritmo capaz de ler exames de EEG. Imagine que tenhamos uma leitura de um exame, ele não consiguirá contar a história de quem o formou. Contudo, esse algoritmo recebe uma bilbioteca de sinais purificados e, com ajuda de um algoritmo baseado em Série de Fourier, tenta prever qual a composição do sinal baseado em sua forma. Na próxima tela há um braço com 8 botões apertaveis, você pode escolher uma composição de dedos (5 botões escrito 'Finger') e a região de medição (3 quadrados amarelos, só um é selecionavel por vez e você não pode prosseguir se não escolher nenhum)"
+    str_texto_solver = "Essa parte é uma tentativa de construir um algoritmo capaz de ler exames de EEG. Imagine que tenhamos uma leitura de um exame, ele não consiguirá contar a história de quem o formou. Contudo, esse algoritmo recebe uma bilbioteca de sinais purificados e, com ajuda de um algoritmo baseado em Série de Fourier, tenta prever qual a composição do sinal baseado em sua forma. Na próxima tela há um braço com 8 botões apertaveis, você pode escolher uma composição de dedos (5 botões escrito 'Finger') e a região de medição (3 quadrados amarelos, só um é selecionavel por vez e você não pode prosseguir se não escolher nenhum)"
 
-    str_texto_multi = justificar_texto(str_texto_multi, 75)
-    texto_multi = fonte_bem_pequena.render(str_texto_multi, True, (0, 0, 0))
+    str_texto_solver = justificar_texto(str_texto_solver, 75)
+    texto_solver = fonte_bem_pequena.render(str_texto_solver, True, (0, 0, 0))
 
     """Quando eu aperto um botão, ele precisa sair de dois loops ao mesmo tempo.
     Para isso, vou usar try e dar raise em um StopIteration quando um botão for
@@ -361,8 +361,8 @@ def main():
                 tela.blit(fundo_text, rect_imagem)
 
                 # Desenhando texto
-                rect = texto_multi.get_rect(center=(larg // 2, altura // 2))
-                tela.blit(texto_multi, rect)
+                rect = texto_solver.get_rect(center=(larg // 2, altura // 2))
+                tela.blit(texto_solver, rect)
 
                 # Interagindo com o mouse (seta direita)
                 rect_imagem = arrow_botaoR.get_rect(
