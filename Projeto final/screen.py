@@ -203,7 +203,7 @@ def main():
 
     # Textos para renderizarmos depois
     # Texto solo
-    str_texto_solo = "Essa simulação visa analisar como que os canais de um neurônio isolado se comportam a um determinado estimulo ou situação (pensando nas sinapses). Para avaliar isso, temos os seguintes comandos: 'Enter' para dar o estímulo, 'UpArrow' e 'DownArrow' para aumentar ou diminuir a intensidade do estimulo, 'Space' para receber uma corrente sináptica estimulante, 'B' para receber uma corrente sináptica inibitória, 'RightArrow' e 'LeftArrow' para controlar o intervalo de tempo etimulante do modo pulso_cronometrado, 'T' para iniciar o modo pulso_cronometrado (que dura 10 ms) e, por fim, 'Escape' sai da simulação. Para fins didáticos, os circulos amarelos são íons de K, vermelho são íons Na e os verdes são íons Ca, com Na<K<Ca"
+    str_texto_solo = "Essa simulação visa analisar como que os canais de um neurônio isolado se comportam a um determinado estimulo ou situação (pensando nas sinapses). Para avaliar isso, temos os seguintes comandos: 'Enter' para dar o estímulo, 'UpArrow' e 'DownArrow' para aumentar ou diminuir a intensidade do estimulo, 'Space' para receber uma corrente sináptica estimulante, 'B' para receber uma corrente sináptica inibitória, 'RightArrow' e 'LeftArrow' para controlar o intervalo de tempo estimulante do modo pulso_cronometrado, 'T' para iniciar o modo pulso_cronometrado (que dura 10 ms) e, por fim, 'Escape' sai da simulação. Para fins didáticos, os círculos amarelos são íons de K, vermelho são íons Na e os verdes são íons Ca, com Na<K<Ca"
 
     str_texto_solo = justificar_texto(str_texto_solo, 70)
     texto_solo = fonte_bem_pequena.render(str_texto_solo, True, (0, 0, 0))
@@ -215,7 +215,7 @@ def main():
     texto_multi = fonte_bem_pequena.render(str_texto_multi, True, (0, 0, 0))
 
     # Textos para solver
-    str_texto_solver = "Essa parte é uma tentativa de construir um algoritmo capaz de ler exames de EEG. Imagine que tenhamos uma leitura de um exame, ele não consiguirá contar a história de quem o formou. Contudo, esse algoritmo recebe uma bilbioteca de sinais purificados e, com ajuda de um algoritmo baseado em Série de Fourier, tenta prever qual a composição do sinal baseado em sua forma. Na próxima tela há um braço com 8 botões apertaveis, você pode escolher uma composição de dedos (5 botões escrito 'Finger') e a região de medição (3 quadrados amarelos, só um é selecionavel por vez e você não pode prosseguir se não escolher nenhum)"
+    str_texto_solver = "Essa parte é uma tentativa de construir um algoritmo capaz de ler exames de EEG. Imagine que tenhamos uma leitura de um exame, ele não consiguirá contar a história de quem o formou. Contudo, esse algoritmo recebe uma biblioteca de sinais purificados e, com ajuda de um algoritmo baseado em Série de Fourier, tenta prever qual a composição do sinal baseado em sua forma. Na próxima tela há um braço com 8 botões apertáveis, você pode escolher uma composição de dedos (5 botões escrito 'Finger') e a região de medição (3 quadrados amarelos, só um é selecionável por vez e você não pode prosseguir se não escolher nenhum)"
 
     str_texto_solver = justificar_texto(str_texto_solver, 75)
     texto_solver = fonte_bem_pequena.render(str_texto_solver, True, (0, 0, 0))
@@ -285,7 +285,7 @@ def main():
                             screen = "Exp_solver_neuron"
 
                 texto = fonte_pequena.render(
-                    "Precione 'Escape' para sair", True, (255, 128, 128)
+                    "Pressione 'Escape' para sair", True, (255, 128, 128)
                 )
                 rect = texto.get_rect(
                     center=(
